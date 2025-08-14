@@ -12,20 +12,31 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class Main {
     public static void main(String[] args) {
+        System.out.println(
+            "Welcome to the to-do CLI app!\n" +
+            "To begin, enter the name/path to a valid json file (extension included).\n" +
+            "Alternatively, enter a name for a new json file, which will be created at " +
+            "the conclusion of this program."
+        );
+        Scanner input = new Scanner(System.in);
+        String jsonFilePath = input.nextLine();
+
         List<Task> tasks;
         try {
-            tasks = Arrays.asList(loadFromJson("test.json"));
+            tasks = Arrays.asList(loadFromJson(jsonFilePath));
+            System.out.println("Successfully loaded from a pre-existing json file!");
         } catch (IOException e) {
             tasks = new ArrayList<>();
-            e.printStackTrace();
+            System.out.println(
+                "This file doesn't exist yet. The task list will be saved there once you're done."
+            );
         }
-
-        Scanner input = new Scanner(System.in);
+        
         new UserTasksManager(tasks, input).run();
         input.close();
 
         try {
-            saveToJson("test.json", tasks.toArray(new Task[tasks.size()]));
+            saveToJson(jsonFilePath, tasks.toArray(new Task[tasks.size()]));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println(
