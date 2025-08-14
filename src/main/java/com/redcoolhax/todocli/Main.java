@@ -26,8 +26,12 @@ public class Main {
 
         try {
             saveToJson("test.json", tasks.toArray(new Task[tasks.size()]));
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            System.out.println(
+                "\nSorry! Your tasks couldn't be saved. " +
+                "See the above error message for more details."
+            );
         }
     }
 
@@ -37,7 +41,7 @@ public class Main {
         return tasks;
     }
 
-    public static void saveToJson(String path, Task[] tasks) throws Exception {
+    public static void saveToJson(String path, Task[] tasks) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         mapper.writeValue(new File(path), tasks);
