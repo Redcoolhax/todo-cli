@@ -5,43 +5,25 @@ package com.redcoolhax.todocli;
  * Has data for a title, description, and status representing the current progress on said Task.
  */
 public class Task {
-    private String title;
     private String description;
     private TaskStatus status;
 
     /**
      * Creates a new Task.
-     * @param title This Task's title.
      * @param description This Task's description.
      * @param status This Task's status representing its current progress.
      */
-    public Task(String title, String description, TaskStatus status) {
-        this.title = title;
+    public Task(String description, TaskStatus status) {
         this.description = description;
         this.status = status;
     }
 
     /**
      * Creates a new Task whose status is the default value (TaskStatus.NOT_STARTED).
-     * @param title This Task's title.
      * @param description This Task's description.
      */
-    public Task(String title, String description) {
-        this(title, description, TaskStatus.NOT_STARTED);
-    }
-
-    /**
-     * @return This Task's title.
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    /**
-     * @param title This Task's title.
-     */
-    public void setTitle(String title) {
-        this.title = title;
+    public Task(String description) {
+        this(description, TaskStatus.NOT_STARTED);
     }
 
     /**
