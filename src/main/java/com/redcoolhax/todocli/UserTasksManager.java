@@ -38,7 +38,8 @@ public class UserTasksManager {
                 "3: Remove a task\n" +
                 "4: Move task\n" +
                 "5: Change description of task\n" +
-                "6: Exit\n"
+                "6: Exit\n" +
+                "You may also enter 0 at any time to return to this menu.\n"
             );
 
             switch (input.nextLine()) {
