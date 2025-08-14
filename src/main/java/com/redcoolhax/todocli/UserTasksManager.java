@@ -34,13 +34,14 @@ public class UserTasksManager {
             switch (input.nextLine()) {
                 case "1" -> addTask();
                 case "2" -> changeTaskStatus();
+                case "3" -> removeTask();
                 case "6" -> {return;}
             }
         }
     }
 
     private void viewTasks() {
-        System.out.println("---List of tasks:---");
+        System.out.println("\n---List of tasks:---");
         int i = 1;
         for (Task task : tasks) {
             System.out.println(i + ": " + task);
@@ -58,16 +59,17 @@ public class UserTasksManager {
     private void changeTaskStatus() {
         if (tasks.size() == 0) {
             System.out.println("Cannot change task status when there are no tasks.");
+            return;
         }
+
         viewTasks();
         System.out.print("Index of Task to update status for: ");
+        int index = adjustedIndexFromInput(tasks.size());
 
-        int response = adjustedIndexFromInput(tasks.size());
-
-        if (response == -1)
+        if (index == -1)
             return;
 
-        Task selectedTask = tasks.get(response);
+        Task selectedTask = tasks.get(index);
         
         System.out.println(
             "Select the new status for this task:\n" +
@@ -78,18 +80,10 @@ public class UserTasksManager {
 
         for (;;) {
             switch (input.nextLine()) {
-                case "0" -> {
-                    return;
-                }
-                case "1" -> {
-                    selectedTask.setStatus(TaskStatus.NOT_STARTED);
-                }
-                case "2" -> {
-                    selectedTask.setStatus(TaskStatus.IN_PROGESS);
-                }
-                case "3" -> {
-                    selectedTask.setStatus(TaskStatus.FINISHED);
-                }
+                case "0" -> {return;}
+                case "1" -> selectedTask.setStatus(TaskStatus.NOT_STARTED);
+                case "2" -> selectedTask.setStatus(TaskStatus.IN_PROGESS);
+                case "3" -> selectedTask.setStatus(TaskStatus.FINISHED);
                 default -> {
                     printInvalidMenuSelectionMessage();
                     continue;
@@ -97,6 +91,22 @@ public class UserTasksManager {
             }
             return;
         }
+    }
+
+    private void removeTask() {
+        if (tasks.size() == 0) {
+            System.out.println("Cannot remove tasks when there are none.");
+            return;
+        }
+
+        viewTasks();
+        System.out.print("Index of Task remove: ");
+        int index = adjustedIndexFromInput(tasks.size());
+
+        if (index == -1)
+            return;
+        
+        tasks.remove(index);
     }
 
     private int adjustedIndexFromInput(int max) {
