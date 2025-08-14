@@ -48,6 +48,8 @@ public class UserTasksManager {
                 case "4" -> moveTask();
                 case "5" -> changeTaskDescription();
                 case "6" -> {return;}
+                case "0" -> {}
+                default -> printInvalidMenuSelectionMessage();
             }
         }
     }
@@ -204,19 +206,18 @@ public class UserTasksManager {
     // UTILITY METHODS
 
     /**
-     * Lets the user input an index ranging from 1 to a given maximum. 
+     * Lets the user input an index ranging from 0 to a given maximum. 
      * Since any input by the user should use 1-based indexing, the value 
      * returned by this function decrements the user's input by 1 to fit with the 
      * 0-based indexing used by Java. For example, the user inputting 2 would result 
      * in this function returning 1.
      * 
-     * Alternatively, the user may input 0, which would cause this function to return -1. 
-     * However, an input of 0 always corresponds to wanting to return to the menu. For this reason, 
-     * The resulting value of -1 should always be explicity checked for when this method is used instead 
-     * of being used as an index (which would just result in an IndexOutOfBoundsException anyway).
+     * The user may also input 0, which corresponds with wanting to return to the menu, in which 
+     * case this method returns a value of -1.
      * @param max The maximum amount that the user is allowed to 
      * directly input (with 1-based indexing in mind).
      * @return The number entered by the user decremented by 1.
+     * @throws IllegalArgumentException if max is less than 1.
      */
     private int adjustedIndexFromInput(int max) {
         if (max < 1) {
