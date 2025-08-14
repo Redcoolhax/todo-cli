@@ -36,6 +36,7 @@ public class UserTasksManager {
                 case "2" -> changeTaskStatus();
                 case "3" -> removeTask();
                 case "4" -> moveTask();
+                case "5" -> changeTaskDescription();
                 case "6" -> {return;}
             }
         }
@@ -64,7 +65,7 @@ public class UserTasksManager {
         }
 
         viewTasks();
-        System.out.print("Index of Task to update status for: ");
+        System.out.print("Index of task to update status for: ");
         int index = adjustedIndexFromInput(tasks.size());
 
         if (index == -1)
@@ -101,7 +102,7 @@ public class UserTasksManager {
         }
 
         viewTasks();
-        System.out.print("Index of Task to be removed: ");
+        System.out.print("Index of task to be removed: ");
         int index = adjustedIndexFromInput(tasks.size());
 
         if (index == -1)
@@ -129,6 +130,28 @@ public class UserTasksManager {
 
         Task task = tasks.remove(currentIndex);
         tasks.add(newIndex, task);
+    }
+
+    private void changeTaskDescription() {
+        if (tasks.size() == 0) {
+            System.out.println("Cannot change task description when there are no tasks.");
+            return;
+        }
+
+        viewTasks();
+
+        System.out.print("Index of task to update description for: ");
+        int index = adjustedIndexFromInput(tasks.size());
+        if (index == -1)
+            return;
+        
+        Task selectedTask = tasks.get(index);
+
+        System.out.println("Old description: " + selectedTask.getDescription());
+        System.out.print("New description: ");
+        String newDescription = input.nextLine();
+
+        selectedTask.setDescription(newDescription);
     }
 
     private int adjustedIndexFromInput(int max) {
