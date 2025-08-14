@@ -35,12 +35,25 @@ public class Main {
         }
     }
 
+    /**
+     * Loads an array of Tasks from a given file path leading to a json file.
+     * @param path Path to the json file.
+     * @return An array of Tasks as provided by the json file.
+     * @throws IOException If the provided path can't be read (ie file doesn't exist).
+     */
     public static Task[] loadFromJson(String path) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         Task[] tasks = mapper.readValue(new File(path), Task[].class);
         return tasks;
     }
 
+    /**
+     * Saves an array of Tasks to a given file path leading to a json file.
+     * Creates one in said path if it doesn't already exist.
+     * @param path Path to the json file.
+     * @param tasks An array of Tasks to be saved to the json file.
+     * @throws IOException If the provided path can't be written to.
+     */
     public static void saveToJson(String path, Task[] tasks) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
