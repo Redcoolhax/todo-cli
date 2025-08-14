@@ -35,13 +35,14 @@ public class UserTasksManager {
                 case "1" -> addTask();
                 case "2" -> changeTaskStatus();
                 case "3" -> removeTask();
+                case "4" -> moveTask();
                 case "6" -> {return;}
             }
         }
     }
 
     private void viewTasks() {
-        System.out.println("\n---List of tasks:---");
+        System.out.println("\n\n---List of tasks:---");
         int i = 1;
         for (Task task : tasks) {
             System.out.println(i + ": " + task);
@@ -100,13 +101,34 @@ public class UserTasksManager {
         }
 
         viewTasks();
-        System.out.print("Index of Task remove: ");
+        System.out.print("Index of Task to be removed: ");
         int index = adjustedIndexFromInput(tasks.size());
 
         if (index == -1)
             return;
         
         tasks.remove(index);
+    }
+
+    private void moveTask() {
+        if (tasks.size() < 2) {
+            System.out.println("Cannot move tasks when there are less than two.");
+            return;
+        }
+
+        viewTasks();
+        System.out.print("Index of Task to be moved: ");
+        int currentIndex = adjustedIndexFromInput(tasks.size());
+        if (currentIndex == -1)
+            return;
+        
+        System.out.print("Index to move Task to: ");
+        int newIndex = adjustedIndexFromInput(tasks.size());
+        if (newIndex == -1)
+            return;
+
+        Task task = tasks.remove(currentIndex);
+        tasks.add(newIndex, task);
     }
 
     private int adjustedIndexFromInput(int max) {
