@@ -8,6 +8,7 @@ import java.util.Scanner;
 import java.io.File;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class Main {
     public static void main(String[] args) {
@@ -16,6 +17,7 @@ public class Main {
             tasks = Arrays.asList(loadFromJson("test.json"));
         } catch (IOException e) {
             tasks = new ArrayList<>();
+            e.printStackTrace();
         }
 
         Scanner input = new Scanner(System.in);
@@ -37,6 +39,7 @@ public class Main {
 
     public static void saveToJson(String path, Task[] tasks) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
         mapper.writeValue(new File(path), tasks);
     }
 }

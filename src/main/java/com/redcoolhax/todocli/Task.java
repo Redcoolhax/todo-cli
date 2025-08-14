@@ -27,6 +27,12 @@ public class Task {
     }
 
     /**
+     * Empty constructor for compatibility with 
+     * com.fasterxml.jackson.databind.ObjectMapper's readValue method.
+     */
+    public Task() {}
+
+    /**
      * @return This Task's description.
      */
     public String getDescription() {
