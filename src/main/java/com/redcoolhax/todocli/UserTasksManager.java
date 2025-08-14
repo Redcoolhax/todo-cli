@@ -1,5 +1,6 @@
 package com.redcoolhax.todocli;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -32,6 +33,7 @@ public class UserTasksManager {
 
             switch (input.nextLine()) {
                 case "1" -> addTask();
+                case "2" -> changeTaskStatus();
                 case "6" -> {return;}
             }
         }
@@ -39,8 +41,10 @@ public class UserTasksManager {
 
     private void viewTasks() {
         System.out.println("---List of tasks:---");
+        int i = 1;
         for (Task task : tasks) {
-            System.out.println(task);
+            System.out.println(i + ": " + task);
+            i++;
         }
         System.out.println("------");
     }
@@ -49,5 +53,76 @@ public class UserTasksManager {
         System.out.print("Description of new task: ");
         String description = input.nextLine();
         tasks.addLast(new Task(description));
+    }
+
+    private void changeTaskStatus() {
+        if (tasks.size() == 0) {
+            System.out.println("Cannot change task status when there are no tasks.");
+        }
+        viewTasks();
+        System.out.print("Index of Task to update status for: ");
+
+        int response = adjustedIndexFromInput(tasks.size());
+
+        if (response == -1)
+            return;
+
+        Task selectedTask = tasks.get(response);
+        
+        System.out.println(
+            "Select the new status for this task:\n" +
+            "1: Not started\n" +
+            "2: In progress\n" +
+            "3: Finished\n"
+        );
+
+        for (;;) {
+            switch (input.nextLine()) {
+                case "0" -> {
+                    return;
+                }
+                case "1" -> {
+                    selectedTask.setStatus(TaskStatus.NOT_STARTED);
+                }
+                case "2" -> {
+                    selectedTask.setStatus(TaskStatus.IN_PROGESS);
+                }
+                case "3" -> {
+                    selectedTask.setStatus(TaskStatus.FINISHED);
+                }
+                default -> {
+                    printInvalidMenuSelectionMessage();
+                    continue;
+                }
+            }
+            return;
+        }
+    }
+
+    private int adjustedIndexFromInput(int max) {
+        int index;
+        for (;;) {
+            try {
+                index = input.nextInt() - 1;
+                input.nextLine();
+            } catch (InputMismatchException e) {
+                index = -1;
+            }
+            if (index >= -1 && index < max)
+                return index;
+            else
+                System.out.println(
+                    "\nInvalid input! Response must be an integer from 0 to "
+                    + max
+                    + ". Inputting 0 will return you to the menu."
+                );
+        }
+    }
+
+    private void printInvalidMenuSelectionMessage() {
+        System.out.println(
+            "Invalid input. Please select one of the available options "
+            + "(or input 0 to return to menu)."
+        );
     }
 }
