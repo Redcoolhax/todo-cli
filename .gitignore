@@ -3,3 +3,6 @@ target/
 
 # VSCode-specific folder
 .vscode/
+
+# Json files
+*.json
