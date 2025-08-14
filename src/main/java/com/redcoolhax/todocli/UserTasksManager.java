@@ -18,12 +18,10 @@ public class UserTasksManager {
     }
 
     public void run() {
-        String response;
-
         for (;;) {
             viewTasks();
             System.out.println(
-                "Please select an option:\n" +
+                "\nPlease select an option:\n" +
                 "1: Add a new task\n" +
                 "2: Change status of task\n" +
                 "3: Remove a task\n" +
@@ -34,7 +32,7 @@ public class UserTasksManager {
 
             switch (input.nextLine()) {
                 case "1" -> addTask();
-
+                case "6" -> {return;}
             }
         }
     }
