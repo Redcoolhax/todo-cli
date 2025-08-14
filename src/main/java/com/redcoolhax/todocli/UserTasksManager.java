@@ -21,6 +21,7 @@ public class UserTasksManager {
         String response;
 
         for (;;) {
+            viewTasks();
             System.out.println(
                 "Please select an option:\n" +
                 "1: Add a new task\n" +
@@ -36,6 +37,14 @@ public class UserTasksManager {
 
             }
         }
+    }
+
+    private void viewTasks() {
+        System.out.println("---List of tasks:---");
+        for (Task task : tasks) {
+            System.out.println(task);
+        }
+        System.out.println("------");
     }
 
     private void addTask() {
