@@ -57,7 +57,7 @@ public class Main {
      * @return An array of Tasks as provided by the json file.
      * @throws IOException If the provided path can't be read (ie file doesn't exist).
      */
-    public static Task[] loadFromJson(String path) throws IOException {
+    private static Task[] loadFromJson(String path) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         Task[] tasks = mapper.readValue(new File(path), Task[].class);
         return tasks;
@@ -70,7 +70,7 @@ public class Main {
      * @param tasks An array of Tasks to be saved to the json file.
      * @throws IOException If the provided path can't be written to.
      */
-    public static void saveToJson(String path, Task[] tasks) throws IOException {
+    private static void saveToJson(String path, Task[] tasks) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         mapper.writeValue(new File(path), tasks);
@@ -84,7 +84,7 @@ public class Main {
      * The json extension itself is excluded, as the user loads task lists by inputting 
      * the file name without it.
      */
-    public static void printTaskListsInCurrentFolder() {
+    private static void printTaskListsInCurrentFolder() {
         File currentFolder = new File(".");
         File[] files = currentFolder.listFiles();
 
@@ -106,7 +106,7 @@ public class Main {
      * @param fileName The file name or path of a file.
      * @return The file name without its extension (or just the file name if it doesn't have one).
      */
-    public static String fileNameWithoutExtension(String fileName) {
+    private static String fileNameWithoutExtension(String fileName) {
         int indexOfLastPeriod = fileName.lastIndexOf('.');
         if (indexOfLastPeriod == -1)
             return fileName;
@@ -117,7 +117,7 @@ public class Main {
      * @param fileName The file name or path of a file.
      * @return The file's extension (or an empty String if it doesn't have one).
      */
-    public static String extensionOfFileName(String fileName) {
+    private static String extensionOfFileName(String fileName) {
         int indexOfLastPeriod = fileName.lastIndexOf('.');
         if (indexOfLastPeriod == -1)
             return "";
