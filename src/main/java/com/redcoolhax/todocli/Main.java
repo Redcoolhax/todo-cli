@@ -14,21 +14,23 @@ public class Main {
     public static void main(String[] args) {
         System.out.println(
             "Welcome to the to-do CLI app!\n" +
-            "To begin, enter the name/path to a valid json file (extension included).\n" +
-            "Alternatively, enter a name for a new json file, which will be created at " +
-            "the conclusion of this program."
+            "To begin, enter the name of one of the following task lists, " +
+            "or enter a new name to create a new one."
         );
+        printTaskListsInCurrentFolder();
+        System.out.println();
+
         Scanner input = new Scanner(System.in);
-        String jsonFilePath = input.nextLine();
+        String taskListName = input.nextLine();
 
         List<Task> tasks;
         try {
-            tasks = Arrays.asList(loadFromJson(jsonFilePath));
-            System.out.println("Successfully loaded from a pre-existing json file!");
+            tasks = Arrays.asList(loadFromJson(taskListName + ".json"));
+            System.out.println("Successfully loaded " + taskListName + "!");
         } catch (IOException e) {
             tasks = new ArrayList<>();
             System.out.println(
-                "This file doesn't exist yet. The task list will be saved there once you're done."
+                "This task list doesn't exist yet. The task list will be saved there once you're done."
             );
         }
         
@@ -36,7 +38,7 @@ public class Main {
         input.close();
 
         try {
-            saveToJson(jsonFilePath, tasks.toArray(new Task[tasks.size()]));
+            saveToJson(taskListName + ".json", tasks.toArray(new Task[tasks.size()]));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println(
@@ -45,6 +47,9 @@ public class Main {
             );
         }
     }
+
+
+    // METHODS FOR LOADING AND SAVING JSON FILES.
 
     /**
      * Loads an array of Tasks from a given file path leading to a json file.
@@ -69,5 +74,53 @@ public class Main {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         mapper.writeValue(new File(path), tasks);
+    }
+
+    
+    // METHODS FOR SHOWING INFO TO THE USER.
+
+    /**
+     * Prints out the names of all json files in the current working directory.
+     * The json extension itself is excluded, as the user loads task lists by inputting 
+     * the file name without it.
+     */
+    public static void printTaskListsInCurrentFolder() {
+        File currentFolder = new File(".");
+        File[] files = currentFolder.listFiles();
+
+        for (File file : files) {
+            if (file.isDirectory())
+                continue;
+
+            String fileName = file.getName();
+            
+            if (extensionOfFileName(fileName).equals("json"))
+                System.out.println(fileNameWithoutExtension(fileName));
+        }
+    }
+
+    
+    // METHODS FOR PARSING INFO FROM FILE NAMES.
+
+    /**
+     * @param fileName The file name or path of a file.
+     * @return The file name without its extension (or just the file name if it doesn't have one).
+     */
+    public static String fileNameWithoutExtension(String fileName) {
+        int indexOfLastPeriod = fileName.lastIndexOf('.');
+        if (indexOfLastPeriod == -1)
+            return fileName;
+        return fileName.substring(0, indexOfLastPeriod);
+    }
+
+    /**
+     * @param fileName The file name or path of a file.
+     * @return The file's extension (or an empty String if it doesn't have one).
+     */
+    public static String extensionOfFileName(String fileName) {
+        int indexOfLastPeriod = fileName.lastIndexOf('.');
+        if (indexOfLastPeriod == -1)
+            return "";
+        return fileName.substring(indexOfLastPeriod + 1, fileName.length());
     }
 }
