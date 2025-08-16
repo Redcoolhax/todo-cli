@@ -4,15 +4,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 import java.io.File;
+import java.io.FileInputStream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class Main {
+    private static final String DEFAULT_DATA_FOLDER = "./data";
+
     public static void main(String[] args) {
-        File dataFolder = new File(".");
+        File dataFolder = getDataDirectory();
 
         System.out.println(
             "Welcome to the to-do CLI app!\n" +
@@ -79,6 +83,46 @@ public class Main {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         mapper.writeValue(new File(path), tasks);
+    }
+
+
+    // METHODS FOR LOADING OTHER TYPES OF DATA
+
+    /**
+     * Gets the dataFolder as specified in config.properties. If config.properties cannot be read, then 
+     * the default of ./data will be used instead. In either case, if the data folder doesn't exist, then 
+     * it will be created. The user will also be notified via the console if the folder is successfully 
+     * loaded/created or not.
+     * @return The data folder as specified by 'dataFolder' in config.properties, or the ./data folder if 
+     * the aforementioned file can't be read.
+     * @throws RuntimeException if the folder doesn't already exist and can't be created.
+     */
+    private static File getDataDirectory() {
+        Properties properties = new Properties();
+        File dataFolder;
+        try (FileInputStream input = new FileInputStream("config.properties")) {
+            properties.load(input);
+            String dataFolderName = properties.getProperty("dataFolder");
+            System.out.println("Using folder: " + dataFolderName);
+            dataFolder = new File(dataFolderName);
+        } catch (IOException e) {
+            System.out.println(
+                "There was an error loading the selected dataFolder from config.properties, " +
+                "using default: " + DEFAULT_DATA_FOLDER
+            );
+            dataFolder = new File(DEFAULT_DATA_FOLDER);
+        }
+
+        if (!dataFolder.exists()) {
+            boolean successfullyCreated = dataFolder.mkdirs();
+            if (!successfullyCreated) {
+                throw new RuntimeException("Couldn't create data folder: " + dataFolder.getName());
+            } else {
+                System.out.println("Creating new folder: " + dataFolder.getName());
+            }
+        }
+
+        return dataFolder;
     }
 
     
