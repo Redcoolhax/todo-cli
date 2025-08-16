@@ -13,9 +13,16 @@ See: [config.properties](config.properties) for additional configuration setting
 - Jackson (Json serialization libary)
 
 ## How to Run
+When building from source, the easiest way is to use the exec-maven-plugin. These two commands will compile the Java files into class files, and then run the application with dependencies included:
 ```bash
 mvn compile
 mvn exec:java
+```
+
+Alternatively, you may use the maven-assembly-plugin, which is included to assist with the creation of release versions. This creates a jar file with all dependencies included, allowing it to run as long as the user has Java 17. To test this, build and run the jar with the following commands:
+```bash
+mvn package
+java -jar target/todo-cli-1.0-SNAPSHOT-jar-with-dependencies.jar
 ```
 
 ## License
