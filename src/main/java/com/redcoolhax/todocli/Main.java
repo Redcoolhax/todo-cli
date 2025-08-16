@@ -50,6 +50,14 @@ public class Main {
             System.out.println(
                 "This task list doesn't exist yet. The task list will be saved there once you're done."
             );
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(
+                "\nThere was an issue with loading file: " +
+                dataFolder.getName() + "/" + taskListName + ".json\n" +
+                "See the above error message for more details."
+            );
+            return;
         }
         
         new UserTasksManager(tasks, input).run();
@@ -75,6 +83,8 @@ public class Main {
      * @param path Path to the json file.
      * @return An array of Tasks as provided by the json file.
      * @throws IOException If the provided path can't be read (ie file doesn't exist).
+     * @throws StreamReadException If the provided path can't be properly read as a json file.
+     * @throws DatabindException If the provided json can't be translated as a Task array.
      */
     private static Task[] loadFromJson(String path) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
