@@ -12,12 +12,14 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class Main {
     public static void main(String[] args) {
+        File dataFolder = new File(".");
+
         System.out.println(
             "Welcome to the to-do CLI app!\n" +
             "To begin, enter the name of one of the following task lists, " +
             "or enter a new name to create a new one."
         );
-        printTaskListsInCurrentFolder();
+        printTaskListsInFolder(dataFolder);
         System.out.println();
 
         Scanner input = new Scanner(System.in);
@@ -25,7 +27,9 @@ public class Main {
 
         List<Task> tasks;
         try {
-            tasks = Arrays.asList(loadFromJson(taskListName + ".json"));
+            tasks = new ArrayList<Task>(Arrays.asList(
+                loadFromJson(dataFolder.getName() + "/" + taskListName + ".json")
+                ));
             System.out.println("Successfully loaded " + taskListName + "!");
         } catch (IOException e) {
             tasks = new ArrayList<>();
@@ -38,7 +42,8 @@ public class Main {
         input.close();
 
         try {
-            saveToJson(taskListName + ".json", tasks.toArray(new Task[tasks.size()]));
+            saveToJson(dataFolder.getName() + "/" + taskListName + ".json",
+                tasks.toArray(new Task[tasks.size()]));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println(
@@ -80,13 +85,13 @@ public class Main {
     // METHODS FOR SHOWING INFO TO THE USER.
 
     /**
-     * Prints out the names of all json files in the current working directory.
+     * Prints out the names of all json files in a provided directory.
      * The json extension itself is excluded, as the user loads task lists by inputting 
      * the file name without it.
+     * @param folder The directory being searched for json files.
      */
-    private static void printTaskListsInCurrentFolder() {
-        File currentFolder = new File(".");
-        File[] files = currentFolder.listFiles();
+    private static void printTaskListsInFolder(File folder) {
+        File[] files = folder.listFiles();
 
         for (File file : files) {
             if (file.isDirectory())
