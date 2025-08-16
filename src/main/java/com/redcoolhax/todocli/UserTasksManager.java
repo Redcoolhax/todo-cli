@@ -64,7 +64,7 @@ public class UserTasksManager {
     private void addTask() {
         System.out.print("Description of new task: ");
         String description = input.nextLine();
-        tasks.addLast(new Task(description));
+        tasks.add(new Task(description));
     }
 
     /**
