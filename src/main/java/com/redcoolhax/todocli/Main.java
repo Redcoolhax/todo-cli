@@ -16,8 +16,18 @@ public class Main {
     private static final String DEFAULT_DATA_FOLDER = "./data";
 
     public static void main(String[] args) {
-        File dataFolder = getDataDirectory();
-
+        File dataFolder;
+        try {
+            dataFolder = getDataDirectory();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            System.out.println(
+                "\nSorry! The data folder couldn't be accessed. " +
+                "See the above error message for more details."
+            );
+            return;
+        }
+        
         System.out.println(
             "Welcome to the to-do CLI app!\n" +
             "To begin, enter the name of one of the following task lists, " +
